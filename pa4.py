@@ -34,6 +34,14 @@ def validate(list, word):
         else: 
             print("Invalid word")
 
+
+def is_repeat_guess(guess, previous_guesses):
+    """
+    Docstring for is_repeat_guess
+    check whether a guess has already been used in the current game
+    """
+    return guess in previous_guesses
+
 def check_guess(secret_word, guess, keyboard):
     """
     Check a player's guess against the secret word and update feedback and keyboard.
@@ -207,6 +215,8 @@ def play_wordle(word_dict, wordle_number, results_file):
     emoji_board = []  # Track emoji feedback for each attempt
     keyboard = {letter: 'white' for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"}  # Initialize keyboard
 
+    previous_guesses=set() # will start fresh every game (i know people like their specific starting words... boring)
+
     print(f"\nWelcome to Bevordle #{wordle_number}!")
     time.sleep(1)  # Pause to let the user read the message
     display_board(game_board)
@@ -216,11 +226,25 @@ def play_wordle(word_dict, wordle_number, results_file):
         guess_check = True  # Initial condition to ensure valid input
         while guess_check is True:
             guess = input("\nYour guess (5 letters): ").upper().strip()
-            if len(guess) == 5:  # Condition for valid input
-                guess_check = False  # Break the loop when the condition is met
-            else:
+            if len(guess) != 5:  # Condition for invalid input
                 print("Invalid input! Your guess must be exactly 5 letters. Try again.")
                 time.sleep(0.5)
+                continue
+
+            if not guess.isalpha():
+                print("Invalid input! Guess must contain only letters (A-Z)... not whatever you put in.")
+                continue
+
+            if is_repeat_guess(guess, previous_guesses):
+                print("You've already guessed that word this game! Try a new one... that must've been a mistake.")
+                time.sleep(0.5)
+                continue
+            
+            previous_guesses.add(guess)
+            guess_check = False
+
+
+                
 
         feedback, emoji_feedback = check_guess(secret_wordle, guess, keyboard)
         update_board(game_board, attempt, feedback)  # Update board with feedback
@@ -279,3 +303,4 @@ def main():
 
 main()
 
+"""adding some lines, wanting to figure out how to push"""
