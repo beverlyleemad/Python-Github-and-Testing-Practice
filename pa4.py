@@ -233,6 +233,7 @@ def play_wordle(word_dict, wordle_number, results_file):
 
             if not guess.isalpha():
                 print("Invalid input! Guess must contain only letters (A-Z)... not whatever you put in.")
+                continue
 
             if is_repeat_guess(guess, previous_guesses):
                 print("You've already guessed that word this game! Try a new one... that must've been a mistake.")
