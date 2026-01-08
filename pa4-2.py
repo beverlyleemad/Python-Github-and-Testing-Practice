@@ -28,10 +28,11 @@ def validate(list, word):
     Returns:
         str: The validated word.
     """
-    while word not in options:
-        print("Invalid word")
-        word=input("Try again: ").strip.lower()
-    return word
+    while True:
+        if word in list:
+            return word
+        else: 
+            print("Invalid word")
 
 
 def is_repeat_guess(guess, previous_guesses):
@@ -141,7 +142,7 @@ def update_board(board, attempt, feedback):
     """
     board[attempt] = feedback
 
-def record_results(filename, wordle_number, attempts, emoji_board):
+def record_results(filename, wordle_number, attempts, emoji_board, elapsed_time):
     """
     Record game results to a file.
 
@@ -152,7 +153,10 @@ def record_results(filename, wordle_number, attempts, emoji_board):
         emoji_board (list): The emoji feedback for the game.
     """
     with open(filename, 'a') as file:
-        file.write(f"Bevordle #{wordle_number} {attempts}/6\n")
+        file.write(
+            f"Bevordle #{wordle_number} {attempts}/6"
+            f"({format_time(elapsed_time)})\n"
+        )
         for emoji_row in emoji_board:
             file.write(''.join(emoji_row) + '\n')
         file.write('\n')  # blank line to separate games
@@ -199,6 +203,14 @@ def view_results(filename):
 
 wordle_number = 1  # Start with #1
 
+# formatting time function
+def format_time(seconds):
+    minutes = int(seconds//60)
+    secs=int(seconds % 60) #renamed to secs
+    return f"{minutes}:{secs:02d}"
+
+
+
 def play_wordle(word_dict, wordle_number, results_file):
     """
     Play a game of Bevordle.
@@ -218,6 +230,7 @@ def play_wordle(word_dict, wordle_number, results_file):
 
     print(f"\nWelcome to Bevordle #{wordle_number}!")
     time.sleep(1)  # Pause to let the user read the message
+    start_time=time.time()
     display_board(game_board)
     display_keyboard(keyboard)
 
@@ -261,10 +274,13 @@ def play_wordle(word_dict, wordle_number, results_file):
         print(f"\nSorry, you've used all your attempts. The word was: {secret_wordle}")
         time.sleep(1)
 
-    record_results(results_file, wordle_number, attempt + 1, emoji_board)
+    end_time=time.time()
+    elapsed_time = end_time-start_time
+    record_results(results_file, wordle_number, attempt + 1, emoji_board, elapsed_time)
 
     print("\nBevordle Results:")
-    print(f"Bevordle #{wordle_number} {attempt + 1}/6\n")
+    print(f"Bevordle #{wordle_number} {attempt + 1}/6")
+    print(f"Time taken: {format_time(elapsed_time)}\n")
     for emoji_row in emoji_board:
         print(''.join(emoji_row))
     time.sleep(2)
