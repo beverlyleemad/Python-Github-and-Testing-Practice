@@ -22,3 +22,5 @@ Improvements:
 1. adding a timer, and the time is displayed in results
 
 --- 
+# How I could've implemented doctesting
+I used unit testing because I thought the assertion would work better and because I thought that it makes sense to use doctesting for things that are shorter but unittesting for longer testing, so that it is separate and keeps the original code super legible which makes it easier for me. I think doctesting is great for things like calculators that compute things and are supposed to return set values where those values are concise, but my code is a little chunkier. I think I could've used doctesting for the checking letters and formatting time to check that that works. 
