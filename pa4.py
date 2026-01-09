@@ -316,6 +316,5 @@ def main():
                 view_results(results_file)  # Display past game results
                 # After viewing results, reprompt for replay or exit decision
 
-main()
-
-#THIS IS THE RIGHT FILE!!!
+if __name__ == "__main__":
+    main()
